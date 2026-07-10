@@ -1,0 +1,3 @@
+ephemeral:
+  dirs:
+    - agentic/hermes/.runtime

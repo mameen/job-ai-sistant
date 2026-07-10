@@ -1,0 +1,45 @@
+# opportunity_artifact/v1 — normalized job intake (pre–Recommendation Report)
+#
+# Every source_kind adapter emits this shape. Fit analysis reads only this file.
+
+schema: opportunity_artifact/v1
+
+opportunity_id: "opp:<sha256-prefix>"   # hash(canonical apply_url or submission blob)
+
+source_kind: user_direct              # user_direct | recruiter_message | aggregator |
+                                      # social | ats | company_site | discovery
+
+source_url: "https://www.ziprecruiter.com/..."
+apply_url: "https://jobs.lever.co/acme/..."
+canonical_url: null                   # resolved employer posting when aggregator
+
+title: "Senior Software Engineer"
+company: "Acme Corp"
+location: "Seattle, WA (hybrid)"
+employment_type: null                 # full_time | contract | ...
+
+job_description: |
+  Full JD text used for fit analysis.
+
+recruiter_message: null               # set when source_kind = recruiter_message
+# recruiter_message:
+#   channel: email
+#   from: "recruiter@example.com"
+#   subject: "..."
+#   body: |
+#     ...
+#   urls_found: []
+
+provenance:
+  - kind: user_pasted
+    field: job_description
+    at: "2026-07-07T18:00:00Z"
+  - kind: fetched
+    url: "https://www.ziprecruiter.com/..."
+    status: ok                        # ok | blocked | dead | skipped
+    at: "2026-07-07T18:00:01Z"
+
+discovered_at: "2026-07-07T18:00:00Z"
+dedupe_key: "<company>|<title>|<apply_url>"
+
+researcher_notes: ""                  # optional; not for user-facing report verbatim

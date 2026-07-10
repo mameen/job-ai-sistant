@@ -1,0 +1,27 @@
+# Career Intelligence — Python dependencies (pip install -r requirements.txt)
+#
+# Installed automatically by: python agentic/hermes/admin/manage.py bootstrap
+#
+# Optional heavy OCR / unstructured parsing (images, scanned PDFs):
+#   pip install -r requirements-kb-extract.txt
+
+# ── Core ─────────────────────────────────────────────────────────────────────
+PyYAML>=6.0
+
+# ── Career KB — scan & extract ───────────────────────────────────────────────
+pypdf>=4.0
+python-docx>=1.0
+
+# ── Career KB — RAG index (ChromaDB + Ollama embeddings) ─────────────────────
+chromadb>=0.5.0
+Pillow>=10.0
+
+# ── Application Coach — DOCX create/edit ─────────────────────────────────────
+# python-docx: create/edit; docxtpl: Jinja merge into pm-resume.docx templates
+docxtpl>=0.16.0
+
+# ── DISCOVER — JobSpy aggregator (LinkedIn, Indeed, Google Jobs, …) ────────
+python-jobspy==1.1.82
+
+# ── Secrets vault — AES-256-GCM at rest ──────────────────────────────────────
+cryptography>=42.0.0,<45

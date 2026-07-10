@@ -1,0 +1,70 @@
+# Career Intelligence Hermes profiles — consumed by agentic/hermes/admin/manage.py (setup).
+# Architecture: docs/Career_Intelligence_System.md
+#
+# Default: one Ollama model for every role (single model loaded at a time).
+#
+# --- Ollama switch ---
+# Copy .env.example → .env and set OLLAMA_TARGET=remote (or use hermes_roles.local.yaml).
+# Templates: .env.example, hermes_roles.local.yaml.example — see docs/configuration.md
+# Then: python agentic/hermes/admin/manage.py setup
+#   hermes gateway restart
+#
+# Local laptop (default in yaml):
+#   base_url: http://localhost:11434/v1
+#   default_model: llama3.1:latest
+#
+# Remote GPU host (replace localhost with your LAN hostname — see docs/configuration.md):
+#   base_url: http://gpu-host.local:11434/v1
+#   default_model: qwen3.6:35b
+
+ollama:
+  provider: custom
+  base_url: http://localhost:11434/v1
+  default_model: llama3.1:latest
+  context_length: 131072
+
+# Used when OLLAMA_TARGET=remote in .env (or: setup --remote)
+ollama_remote:
+  provider: custom
+  base_url: http://192.168.0.100:11434/v1
+  default_model: qwen3.6:35b
+  context_length: 262144
+
+toolsets:
+  - hermes-cli
+  - kanban
+
+zazu_knowledge_manager_toolsets:
+  - file
+  - web
+  - kanban_worker
+  - hermes-cli
+
+zazu_researcher_toolsets:
+  - file
+  - web
+  - kanban_worker
+
+zazu_coach_toolsets:
+  - file
+  - web
+  - kanban_worker
+
+roles:
+  - name: zazu_knowledge_manager
+    description: >-
+      Career Knowledge Manager (Project Zazu). Career front desk — route DISCOVER,
+      EVALUATE, APPLY, STATUS, ANALYZE; steward KB; explained learning trace.
+      Dispatches zazu_researcher and zazu_coach; never AI Digest tasks.
+
+  - name: zazu_researcher
+    description: >-
+      Job Researcher (Project Zazu). Primary internet-facing profile. Discover opportunities,
+      validate authenticity, evaluate fit, produce explainable Recommendation
+      Reports. Read-only access to Career KB.
+
+  - name: zazu_coach
+    description: >-
+      Application Coach (Project Zazu). Activated after user approves a role. Tailor resume
+      and cover letter, produce Application Brief, prepare interview strategy,
+      propose KB improvements for zazu_knowledge_manager review.

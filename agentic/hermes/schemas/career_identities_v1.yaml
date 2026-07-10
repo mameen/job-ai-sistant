@@ -1,0 +1,50 @@
+# career_identities/v1 — CKM-managed profile registry (local, gitignored)
+#
+# Path: agentic/hermes/.kb/_registry/identities.json
+# Design: docs/rfc/multi_identity_kb.md
+#
+# profile_id = HMAC-SHA256(install_secret, "career-profile:v1:" + normalized_email)
+#   → url-safe base64url truncated (~22 chars). NOT an encryption key.
+#
+# Vault roots: agentic/hermes/.kb/<profile_id>/{public,private,_index,index_db}
+
+schema: career_identities/v1
+status: proposed
+
+registry_path: agentic/hermes/.kb/_registry/identities.json
+install_secret_path: agentic/hermes/.runtime/install_secret
+
+profile_id:
+  algorithm: HMAC-SHA256
+  encoding: base64url
+  truncate_chars: 22
+  normalized_email: lowercase, strip whitespace
+
+fields:
+  profile_id: stable pseudonymous directory key
+  primary_email_hint: masked hint for UI (e.g. m***@example.com)
+  display_name: human label (from resume or operator)
+  created_at: ISO8601 UTC
+  last_active_at: ISO8601 UTC
+  aliases: []                    # future: additional emails → same profile_id
+  crypto: null                   # future: wrapped DEK (profile_dek/v1)
+
+top_level:
+  active_profile_id: default when CLI/chat omits --profile
+  profiles: list of entries above
+
+isolation:
+  - Workers never read outside active profile_id paths
+  - applications.db and RAG index are per-profile only
+  - learning_events include profile_id, never raw email in artifacts
+
+encryption_phases:
+  phase_0: gitignore + pre-commit only
+  phase_1: encrypt private/ markdown per profile (operator passphrase)
+  phase_2: per-profile DEK wrapped by operator KEK
+  never: profile_id or SHA256(email) as encryption key
+
+related:
+  - docs/rfc/multi_identity_kb.md
+  - docs/rfc/secrets_and_email_intake.md
+  - schemas/secrets_vault_v1.yaml

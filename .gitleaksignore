@@ -1,0 +1,23 @@
+# Standard Gitleaks / Betterleaks allowlist (gitignore syntax).
+# Keep in sync with .piiignore for local-only paths.
+
+agentic/hermes/.kb/
+.kb/
+agentic/hermes/.generated/
+agentic/hermes/.runtime/
+.cache/
+.venv/
+venv/
+
+tests/fixtures/
+tests/data/
+**/*.example.json
+.env.example
+agentic/hermes/kb/scaffold/
+
+# Scanner self-tests construct fake tokens at runtime
+tests/test_check_secrets.py
+scripts/test_check_secrets.py
+
+# detect-secrets baseline (contains hashed findings, not live secrets)
+.secrets.baseline

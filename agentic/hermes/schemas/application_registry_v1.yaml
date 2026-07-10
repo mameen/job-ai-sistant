@@ -1,0 +1,51 @@
+# application_registry/v1 — SQLite pipeline for roles applied to and outcomes
+#
+# Path: agentic/hermes/.kb/_index/applications.db (gitignored with .kb/)
+#
+# Written by manage.py apply; updated via manage.py applications record-outcome.
+# Read by search (dedupe) and Application Coach (patterns).
+
+schema: application_registry/v1
+storage: sqlite3
+
+table: applications
+primary_key: opportunity_id   # opp:<sha256-prefix of dedupe_key>
+
+fields:
+  opportunity_id: stable id
+  company: employer (display name)
+  job_title: role title
+  job_id: ATS requisition or na
+  apply_url: posting URL when known
+  dedupe_key: normalized "<company_slug>|<title_slug>|<job_id>"
+  status: considered | applied | interviewing | offered | rejected | withdrawn | skipped
+  job_date: YYYYMMDD posting or application date
+  proposal_run: proposals/<YYYYMMDDHHmmss>/ folder name
+  resume_path: relative to .kb/ or .generated/
+  cover_path: relative
+  brief_path: relative
+  vault_path: prior application folder under application_history/ if imported
+  notes: free text
+  created_at: ISO8601 UTC
+  updated_at: ISO8601 UTC
+
+table: application_events
+fields:
+  id: autoincrement
+  opportunity_id: FK → applications
+  status: status at event time
+  notes: optional
+  recorded_at: ISO8601 UTC
+
+indexes:
+  - company (normalized lookup for dedupe)
+  - dedupe_key (exact duplicate)
+  - status
+
+related_schemas:
+  - learning_events_v1.yaml  # application_topics + learning_events tables (same DB)
+
+status_flow:
+  - search CONSIDER → considered (optional, future)
+  - apply → applied
+  - user → interviewing | offered | rejected | withdrawn

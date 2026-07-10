@@ -1,0 +1,19 @@
+#!/bin/sh
+# Reject commits that still carry agent co-author trailers after prepare-commit-msg.
+# Keeps GitHub contributor graphs maintainer-only (no cursoragent / Claude bot).
+. "$(dirname "$0")/agent-trailers.sh"
+if has_agent_trailers "$1"; then
+  echo "ERROR: Remove agent Co-authored-by trailers from the commit message." >&2
+  echo "  Blocked: Cursor, Claude Code / Anthropic attribution lines." >&2
+  echo "  This repo attributes commits to the maintainer only." >&2
+  echo "  (prepare-commit-msg should have stripped these — check the message.)" >&2
+  exit 1
+fi
+
+# Require a substantive 'PII-Reviewed:' trailer when pre-commit deferred known-safe
+# (.piiignore) PII findings for acknowledgment. Secrets/forbidden paths never reach here.
+cd "$(dirname "$0")/.."
+PII_PENDING="$(git rev-parse --git-path pii-pending.txt)"
+if [ -f "$PII_PENDING" ]; then
+  python3 scripts/audit_pii.py --verify-review "$1" --pending "$PII_PENDING" || exit 1
+fi

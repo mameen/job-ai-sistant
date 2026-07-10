@@ -1,0 +1,4 @@
+#!/bin/sh
+# Strip agent co-author trailers before commit-msg runs (Cursor, Claude Code).
+. "$(dirname "$0")/agent-trailers.sh"
+strip_agent_trailers "$1"

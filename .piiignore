@@ -1,0 +1,53 @@
+# PII audit exemptions (Presidio + coordinated secret scans).
+# Gitignore-style syntax. Also read as .ignorepii if present.
+#
+# IMPORTANT: .piiignore is OPT-IN only. Scanners ignore it by default.
+# Pass --observe-piiignore to audit_pii.py / audit_secrets.py / check_secrets.py
+# to honor these exemptions. Pre-commit never passes that flag — commit content
+# is always scanned. Forbidden paths (.kb/, .venv/) always alarm if staged.
+#
+# PII-REVIEWED ACKNOWLEDGMENT LANE (fail-closed with evidence):
+#   Pre-commit still scans everything. A PII finding on a path listed HERE (and not
+#   forbidden) is not silently skipped — it is deferred to the commit-msg hook, which
+#   BLOCKS unless the commit message carries a substantive trailer:
+#       PII-Reviewed: <why these are false positives / safe fixtures>
+#   One trailer per commit covers that commit's exemptible findings. Only paths in this
+#   file are acknowledgeable; secrets and forbidden paths (.env, .kb/) always hard-block.
+#   Prefer explaining each exemption inline below so reviewers see the justification.
+#
+# RULE: every path here MUST also be in .gitignore (or be a safe *.example template).
+
+# ── Local career vault & runtime (gitignored) ────────────────────────────────
+agentic/hermes/.kb/
+.kb/
+agentic/hermes/.generated/
+agentic/hermes/.runtime/
+.cache/
+career_kb/
+
+# ── Virtualenv / tooling ─────────────────────────────────────────────────────
+.venv/
+venv/
+__pycache__/
+
+# ── Fixtures & safe templates ────────────────────────────────────────────────
+tests/
+tests/fixtures/
+tests/data/
+**/*.example.json
+**/*.example.yaml
+**/*.example.yml
+**/*.local.yaml.example
+.env.example
+agentic/hermes/kb/scaffold/
+
+# ── Documented machine / dependency files (no real PII) ───────────────────────
+agentic/hermes/admin/config/hermes_roles.yaml
+requirements.txt
+requirements-*.txt
+
+# ── Hook docs (agent attribution examples) ───────────────────────────────────
+.githooks/
+
+# detect-secrets baseline (hashed audit state)
+.secrets.baseline

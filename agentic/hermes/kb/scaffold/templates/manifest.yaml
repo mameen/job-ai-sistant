@@ -1,0 +1,120 @@
+# Project Career Zazu — application DOCX templates (source of truth for pipeline + coach).
+# Runtime copies live at agentic/hermes/.kb/templates/ (gitignored vault).
+# Rebuild from vault originals: python agentic/hermes/scripts/build_zazu_templates.py
+
+version: 1
+
+resume:
+  path: templates/resume/pm-resume.docx
+  legacy_path: private/originals/resume-repo/pm-resume.docx
+  description: >
+    Master resume layout. Header (name, contact) is static. Coach fills section
+    patches only — never retypes the header or section titles.
+  sections:
+    SUMMARY:
+      style: Body Text
+      required: true
+      hint: One paragraph professional summary tailored to the JD.
+    AREAS_OF_EXPERTISE:
+      style: Body Text
+      required: true
+      hint: >
+        One paragraph per expertise row (AI, RAG, Product, Leadership, Technical,
+        Business). Prune to JD-relevant skills only.
+    EXPERIENCES:
+      style: Body Text
+      required: true
+      hint: >
+        Reverse-chronological roles. Each role: Title, Company, [dates] line then
+        bullet paragraphs. Strict 2-page limit when merged.
+    SELECTED_TECHNICAL:
+      style: Body Text
+      required: false
+      hint: Optional deep technical foundation block; omit to drop from output.
+    EDUCATION:
+      style: Body Text
+      required: true
+      hint: Degree lines only; drop irrelevant coursework.
+    CERTIFICATIONS:
+      style: Body Text
+      required: false
+      hint: High-value certs relevant to the role; omit to drop from output.
+    SELECTED_THEMES:
+      style: Body Text
+      required: false
+      hint: Optional narrative themes block.
+    TECH_STACK:
+      style: Body Text
+      required: false
+      hint: Optional stack highlights (AI, cloud, product, engineering).
+
+cover:
+  path: templates/cover/cover.docx
+  legacy_path: private/originals/resume-repo/cover.docx
+  bracket_tokens: [COMPANY, ROLE TITLE, JOB TITLE, TITLE]
+  sections:
+    COVER_P1:
+      required: true
+      hint: Opening paragraph — role motivation; include employer name and role title.
+    COVER_P2:
+      required: true
+      hint: Adobe / current role evidence.
+    COVER_P3:
+      required: true
+      hint: Moderna or prior platform evidence.
+    COVER_P4:
+      required: true
+      hint: Tableau / Microsoft or earlier scope.
+    COVER_P5:
+      required: true
+      hint: Closing value proposition for [COMPANY].
+
+brief:
+  path: templates/brief/application-brief.docx
+  bracket_tokens: [COMPANY, ROLE TITLE, JOB_ID, JOB_DATE, URL]
+  description: >
+    Cloned from pm-resume.docx (margins + name/contact header). Title uses Heading 1;
+    each section uses Heading 2; patch body uses Normal. Coach may use ### lines in
+    patches for Heading 3 subheads inside a section.
+  sections:
+    OPPORTUNITY_INTELLIGENCE:
+      required: true
+      hint: Role, company, location, comp band, posting source, team scope from researcher report.
+    FLAG_ANALYSIS:
+      required: true
+      hint: Red/yellow flags with reasoning; cite job_fitness guardrails.
+    LEVEL_MAPPING:
+      required: true
+      hint: Posted level vs candidate level (SEM at Adobe); title/scope alignment notes.
+    EMPLOYER_SUMMARY:
+      required: true
+      hint: Company mission, product, culture signals, why this employer matters.
+    TOP_MATCHING_EXPERIENCE:
+      required: true
+      hint: Top 4-6 KB-backed strengths mapped to JD requirements.
+    JD_ALIGNMENT:
+      required: true
+      hint: Explicit requirement-to-evidence mapping table or bullets.
+    GAPS_MITIGATIONS:
+      required: true
+      hint: Top 3 gaps with honest mitigations — never invent experience.
+    STAR_STORIES:
+      required: true
+      hint: Three STAR stories (Situation/Task/Action/Result) from KB.
+    INTERVIEW_INTELLIGENCE:
+      required: true
+      hint: Likely questions, angles to lead with, questions to ask the panel.
+    COMPENSATION_NEXT_STEPS:
+      required: true
+      hint: Comp expectations, hybrid/remote check, requisition dedupe, submit checklist.
+    RECOMMENDATION:
+      required: true
+      hint: APPLY / CONSIDER / SKIP with confidence and top 3 reasons from research.
+
+coach:
+  patch_format: section_markdown
+  patch_filename_suffix: _patch.md
+  instructions: >
+    Write section patches as markdown with level-2 headings matching section ids
+    (e.g. ## EXPERIENCES). Pipeline merges patches into templates locally;
+    do not edit binary .docx files.

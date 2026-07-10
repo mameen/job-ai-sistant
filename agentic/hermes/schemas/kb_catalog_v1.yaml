@@ -1,0 +1,36 @@
+# kb_catalog/v1 — derived Career KB index (written by kb-scan, curated by zazu_knowledge_manager)
+#
+# Stored at: .kb/_index/catalog.json (gitignored with .kb/)
+
+schema_version: 1
+
+fields:
+  updated_at: ISO-8601 UTC timestamp of last scan
+  scan_id: optional run identifier (YYYYMMDDHHmmss)
+  documents:
+    description: map of repo-relative path under .kb/ → document record
+    record:
+      sha256: content hash (change detection)
+      size_bytes: file size
+      mtime: ISO-8601 from filesystem mtime
+      mime: detected MIME type
+      extension: file extension including dot
+      layer: public | private | inbox
+      category_id: taxonomy category (see kb/taxonomy.yaml)
+      category_confidence: 0.0–1.0
+      placement_ok: true if file is in the expected folder for its category
+      suggested_path: repo-relative path under .kb/ when placement_ok is false
+      extracted_text_path: path under _index/extracted/ when text was extracted
+      extract_status: ok | partial | unsupported | error | skipped
+      extract_notes: optional human-readable extraction detail
+
+relocation_proposals:
+  description: pending moves — zazu_knowledge_manager applies only after user approval
+  path: _index/relocation_proposals.json
+  record:
+    source_path: current path under .kb/
+    suggested_path: proposed destination under .kb/
+    category_id: taxonomy category
+    confidence: 0.0–1.0
+    reason: short explanation
+    status: pending | approved | rejected

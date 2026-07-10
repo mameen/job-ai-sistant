@@ -1,0 +1,14 @@
+# Career Intelligence — development / CI (optional)
+#
+#   pip install -r requirements-kb-extract.txt
+#   pip install -r requirements-dev.txt
+
+-r requirements-kb-extract.txt
+
+# Add dev-only pins here when needed (linters, etc.)
+
+# Pre-commit security stack (pip install -r requirements-dev.txt)
+presidio-analyzer>=2.2.358,<3
+detect-secrets>=1.5.0,<2
+# After install: python -m spacy download en_core_web_sm
+# Optional CLI (preferred for secrets): brew install betterleaks

@@ -1,0 +1,125 @@
+# Career KB document taxonomy — used by kb-scan for classification and placement.
+# Checked into git; consumed by agentic/hermes/lib/kb/classify.py
+
+version: 1
+
+# Drop zone: any file type. zazu_knowledge_manager classifies and proposes moves (user approves).
+inbox_dir: inbox
+
+# Derived index (gitignored with .kb/). Never store originals here.
+index_dir: _index
+
+categories:
+  - id: master_resume
+    layer: public
+    target_dir: public
+    canonical_files: [public/master_resume.md]
+    keywords: [resume, curriculum vitae, cv, employment history, work experience]
+    file_hints: [resume, cv, vitae]
+
+  - id: skills
+    layer: public
+    target_dir: public
+    canonical_files: [public/skills.md]
+    keywords: [skills, competencies, technologies, tech stack, programming languages]
+    file_hints: [skills, competencies]
+
+  - id: education
+    layer: public
+    target_dir: public
+    canonical_files: [public/education.md]
+    keywords: [education, degree, university, college, coursework, gpa]
+    file_hints: [education, degree, transcript]
+
+  - id: certifications
+    layer: public
+    target_dir: public
+    canonical_files: [public/certifications.md]
+    keywords: [certification, certificate, aws certified, pmp, credential]
+    file_hints: [cert, certification, certificate]
+
+  - id: project
+    layer: public
+    target_dir: public/projects
+    keywords: [project, initiative, shipped, launched, built, delivered]
+    file_hints: [project]
+
+  - id: star_story
+    layer: public
+    target_dir: public/star_stories
+    keywords: [star, situation task action result, behavioral, interview story]
+    file_hints: [star, story, behavioral]
+
+  - id: career_goals
+    layer: private
+    target_dir: private
+    canonical_files: [private/career_goals.md]
+    keywords: [career goals, target role, job search criteria, aspirations]
+    file_hints: [goals, career_goals]
+
+  - id: location_preferences
+    layer: private
+    target_dir: private
+    canonical_files: [private/location_preferences.md]
+    keywords: [location, remote, hybrid, relocation, commute]
+    file_hints: [location, geo]
+
+  - id: compensation_targets
+    layer: private
+    target_dir: private
+    canonical_files: [private/compensation_targets.md]
+    keywords: [compensation, salary, equity, total comp, bonus]
+    file_hints: [comp, compensation, salary]
+
+  - id: performance_themes
+    layer: private
+    target_dir: private
+    canonical_files: [private/performance_themes.md]
+    keywords: [performance review, strengths, growth areas, themes]
+    file_hints: [performance, review]
+
+  - id: red_flags
+    layer: private
+    target_dir: private
+    canonical_files: [private/red_flags.md]
+    keywords: [dealbreaker, red flag, avoid, must not]
+    file_hints: [red_flags]
+
+  - id: yellow_flags
+    layer: private
+    target_dir: private
+    canonical_files: [private/yellow_flags.md]
+    keywords: [yellow flag, caution, concern, tradeoff]
+    file_hints: [yellow_flags]
+
+  - id: application_history
+    layer: private
+    target_dir: private/application_history
+    keywords: [application, applied, interview, offer, rejection, recruiter]
+    file_hints: [application, applied, interview]
+
+  - id: observations
+    layer: private
+    target_dir: private/observations
+    keywords: [observation, company culture, notes on, research notes]
+    file_hints: [observation, notes]
+
+  - id: reflections
+    layer: private
+    target_dir: private/reflections
+    keywords: [reflection, lessons learned, retrospective, journal]
+    file_hints: [reflection, journal]
+
+  - id: original_public
+    layer: public
+    target_dir: public/originals
+    keywords: []
+    file_hints: []
+    fallback: true
+
+  - id: original_private
+    layer: private
+    target_dir: private/originals
+    keywords: []
+    file_hints: []
+    fallback: true

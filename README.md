@@ -1,77 +1,263 @@
-# Job AI-sistant
-Job AI-sistant is an application that helps job seekers to manage their job search process in an efficient way. This tool is useful for generating a fluent cover letter based on a template, and a job description. It is essentially form to generate an affective prompt for ChatGPT.
+<p align="center">
+  <img src="docs/img/ProjectCareerZazu_banner.png" alt="Project Career Zazu — Career Intelligence: three agent profiles" width="720">
+</p>
 
-![](./docs/ai-sistant.jpg)
+<p align="center">
+  <img src="docs/img/ProjectCareerZazu.png" alt="Project Career Zazu logo" width="160">
+  <br>
+  <strong>Career Intelligence</strong> — responsible AI for your professional journey
+  <br>
+  Codename: <strong>Project Career Zazu</strong> ·
+  <a href="docs/profiles/README.md">Profiles</a> ·
+  <a href="agentic/hermes/README.md">Hermes bootstrap</a>
+</p>
 
-**Please use it responsibly.** Review [RESPONSIBLE_AI_CODE_OF_CONDUCT](./RESPONSIBLE_AI_CODE_OF_CONDUCT.md)  and [CONTRIBUTOR_COVENANT_CODE_OF_CONDUCT](./CONTRIBUTOR_COVENANT_CODE_OF_CONDUCT.md) first.
+---
 
-This tool is developed during the great lay-off in 2022/2023, and at that time recruiters are overwhelmed with irrelevant application. **Do your part** and review the job description at least twice, take notes, and decide if the job is a good match before applying.
+**Career Intelligence** is a responsible AI platform that helps you find the
+right roles, prepare truthful application materials, and grow a curated career
+knowledge base you control.
 
-The big picture can be from [here](./docs/PR.md). This is still work in progress, it has a lot of bugs see [known issues](#Known-Issues) . I stopped at the point where it was useful to me, and will continue to add features when I have time.
+This repo is the **Project Career Zazu** Hermes bootstrap — Python +
+[Hermes Agent](https://hermes-agent.nousresearch.com/) for **Career Intelligence**.
 
-# Setting up development environment
+The previous C# / React **Job AI-sistant** prototype is preserved on branch
+`archive/legacy-job-ai-sistant` if you want to dig it out.
 
-## Understanding the UI
+```bash
+git fetch origin archive/legacy-job-ai-sistant
+git checkout archive/legacy-job-ai-sistant
+```
 
-The tool is not full automated yet, there are some manual steps that the use has to do to tell the AI what they care about the most, and 
-if there a cover letter template they want the AI to use for reference. this is the main screen, with the main 5 tabs: [`Job Details`, `Template`, `Logging` `Cover Letter`, `Database`]
+---
 
-### Step 1: Fill in the Job Details fields
+## What we are building
 
-| Field name | Usage |
-| ---|--- |
-| URL | The Url the job was found on, this is the primary key in the DB |
-| Title | The job title, will use the keyword replacement `<JOB_TITLE>` in template |
-| Company | Company name, `<COMPANY>` in template |
-| Location | Company name, `<LOCATION>` in template |
-| Company Mission | Company mission, `<MISSION>` you can instruct in the prompt to search for it |
-| Focus On | things to direct the bot to focus on, Keyword in template is `<FOCUS_ON>` |
+**Three profiles (not two).** Each maps to a Hermes role with its own tools,
+persona (`SOUL.md`), and internet access pattern. **Profile reference** (role,
+artifacts, tools, internet): [`docs/profiles/README.md`](docs/profiles/README.md).
 
-![](./docs/page01.png)
+<table>
+<tr>
+<td align="center" width="33%">
+  <img src="docs/img/KB.png" alt="Career Knowledge Manager" width="160"><br>
+  <strong><a href="docs/profiles/zazu_knowledge_manager.md">Career Knowledge Manager</a></strong><br>
+  <code>zazu_knowledge_manager</code><br>
+  <small>KB steward — curates professional history; only writer to the KB (after your approval)</small><br>
+  <a href="docs/profiles/zazu_knowledge_manager.md">role · artifacts · tools · internet →</a>
+</td>
+<td align="center" width="33%">
+  <img src="docs/img/Researcher.png" alt="Job Researcher" width="160"><br>
+  <strong><a href="docs/profiles/zazu_researcher.md">Job Researcher</a></strong><br>
+  <code>zazu_researcher</code><br>
+  <small>Opportunity scout & evaluator — Recommendation Reports; read-only KB</small><br>
+  <a href="docs/profiles/zazu_researcher.md">role · artifacts · tools · internet →</a>
+</td>
+<td align="center" width="33%">
+  <img src="docs/img/Coach.png" alt="Application Coach" width="160"><br>
+  <strong><a href="docs/profiles/zazu_coach.md">Application Coach</a></strong><br>
+  <code>zazu_coach</code><br>
+  <small>Application prep for approved roles — resume, cover letter, Application Brief</small><br>
+  <a href="docs/profiles/zazu_coach.md">role · artifacts · tools · internet →</a>
+</td>
+</tr>
+</table>
 
-Once you click `Generate ChatGPT Outlput` it will generate the following prompt:
+- [**Job Researcher**](docs/profiles/zazu_researcher.md) answers: *Should I pursue this?*
+- [**Application Coach**](docs/profiles/zazu_coach.md) answers: *How do I win this?* (only after you approve)
+- [**Career Knowledge Manager**](docs/profiles/zazu_knowledge_manager.md) answers: *What should run next?* and *Is our career knowledge accurate?*
+
+Core principles: human in control, truthful by design, evidence-backed
+observations, KB writes only after explicit user approval.
+
+→ Profile index: [`docs/profiles/README.md`](docs/profiles/README.md) ·
+Full spec: [`docs/Career_Intelligence_System.md`](docs/Career_Intelligence_System.md)
+
+---
+
+## Repo layout (bootstrap)
 
 ```
-Customize this following cover letter template delimited by triple backticks.
-in one page, in Rich Text Format : 
-```<COVER_LETTER_TEMPLATE>```
-with the the following job description delimited by triple backticks ```<JOB_TITLE>```
- at ```<COMPANY>```
-Focusing on:
-<FOCUS_ON>
-
-Their Mission is:
-```<MISSION>```
-The Job Description - delimited by triple backticks -  is:
-```<JOB_DESCRIPTION>```
+agentic/hermes/          # Hermes integration — profiles, admin, config
+docs/                    # Architecture and onboarding
 ```
-## Step 2
 
-if the API succeeds, it will append the results to the `Cover Letter` and switch to it. 
-if not, it will dump the prompt and result in the `Loggin` tab.
+Inspired by the [AI Digest](https://github.com/mameen/AI_Digest) agentic bootstrap
+pattern — reference implementation only, not a dependency. Shared agent onboarding:
+[`.agents/AGENTS.md`](.agents/AGENTS.md) · [`.agents/onboarding/hermes-and-repo.md`](.agents/onboarding/hermes-and-repo.md).
 
-## Step 3
+---
 
-If you are happy with the result, you can update the data base, or just save the cover letter locally
+## Agent & contributor docs
 
-after updating the database you will have a record of the jobs you applied to:
-
-![](./docs/page05.png)
-
-## User provided files
-You have to provide these files in the [./resources](./resources) folder
-|Files name | Usage|
+| Doc | Purpose |
 |---|---|
-|.API_KEY | OpenAI Key; get from [here](https://platform.openai.com/account/api-keys) |
-|cl-header.rtf | The header for the cover letter. |
-|cl-template.rtf | The template to use for field replacement like `<JOB_TITLE>`, `<COMPANY>`. |
-|FocusOn.txt | Your top things you want the bot to focus on. |
+| [`.agents/AGENTS.md`](.agents/AGENTS.md) | Day-to-day rules — PII, hooks, Hermes redeploy, testing |
+| [`.agents/onboarding/hermes-and-repo.md`](.agents/onboarding/hermes-and-repo.md) | **Zazu profiles must read** — repo layout, env, git boundaries |
+| [`.agents/README.md`](.agents/README.md) | Layout and reading order |
 
-## Known Issues
+Hermes `zazu_*` SOULs reference `REPO_ONBOARDING.md` (deployed to `~/.hermes/profiles/` on `setup`).
 
-## What's next?
-These is a large set of features I like to implement see the big picture can be from [here](./docs/PR.md)
+---
 
-[ ] I like to have a different prompt. Here is how I like to do it.. use the Cover letter Template to include the prompt template
-[ ] Full automation. Just start from the job URL, and let the app do the rest
-[ ] React.JS / React native. It would be nice to rnn this from my mobile
+## Getting started
+
+Full machine checklist: **[SETUP.md](SETUP.md)** (venv, pip deps, system OCR).
+
+### 1. Clone and bootstrap
+
+```bash
+git clone <your-remote> job-ai-sistant
+cd job-ai-sistant
+
+cp .env.example .env
+python agentic/hermes/admin/manage.py bootstrap --extract-kb   # venv + pip deps
+python agentic/hermes/admin/manage.py setup                    # Hermes profiles + Ollama
+python agentic/hermes/admin/manage.py status                   # sanity check
+```
+
+`bootstrap --extract-kb` installs both `requirements.txt` and
+`requirements-kb-extract.txt` (PDF/DOCX parsing, unstructured OCR). If the venv
+already exists after a `git pull`:
+
+```bash
+python agentic/hermes/admin/manage.py install-deps --kb-extract
+```
+
+### 2. Ollama — point at your host and pull models
+
+Edit **`.env`** (never committed). Two common patterns:
+
+| | Laptop only | Remote GPU + local embeddings |
+|---|---|---|
+| **Chat** | `OLLAMA_BASE_URL=http://localhost:11434/v1` | `http://192.168.0.100:11434/v1` (LAN host) |
+| **Model** | `llama3.1:latest` | `qwen3.6:35b` |
+| **Embeddings** | same host | `OLLAMA_EMBED_BASE_URL=http://localhost:11434/v1` |
+
+Chat and embeddings can use **different hosts** — useful when the remote GPU
+has your big chat model but not the embedding model.
+
+```bash
+# On whichever machine serves each role:
+ollama pull qwen3.6:35b          # chat (or your chosen model)
+ollama pull nomic-embed-text     # KB RAG embeddings — required for kb-extract
+```
+
+Re-run `setup` after changing `.env`:
+
+```bash
+python agentic/hermes/admin/manage.py setup
+```
+
+See [`.env.example`](.env.example) and
+[`agentic/hermes/admin/config/hermes_roles.yaml`](agentic/hermes/admin/config/hermes_roles.yaml).
+
+### 3. Add your career documents (`.kb/`)
+
+Your files live under **`agentic/hermes/.kb/`** — gitignored, stays on your machine.
+Bootstrap copies scaffold templates into place; you add the real content.
+
+```
+agentic/hermes/.kb/
+├── inbox/              drop zone — dump exports, scans, random PDFs/DOCX
+├── public/             curated markdown agents read first (resume, skills, …)
+├── private/            goals, comp, red/yellow flags, prompts, import originals
+│   └── originals/      source DOCX/PDF you keep as templates (e.g. pm-resume.docx)
+├── _index/             derived catalog + extracted text (rebuilt by kb-extract)
+└── index_db/           ChromaDB RAG index (Ollama embeddings)
+```
+
+**You do not need a perfect folder layout.** Drop scattered files in `inbox/` or
+any subfolder — `kb-extract` walks the tree, extracts text (basic → unstructured
+→ OCR), classifies against the taxonomy, and builds a **RAG index** so agents can
+retrieve relevant chunks even when canonical `public/*.md` is thin or missing.
+Organize step also drafts `public/master_resume.md`, `skills.md`, etc. from your
+best resume sources.
+
+```bash
+# Copy your stuff in — examples:
+cp ~/Documents/resume.pdf agentic/hermes/.kb/inbox/
+cp -r ~/OneDrive/Applications/ agentic/hermes/.kb/private/application_history/
+
+# Index vault → RAG + canonical markdown
+python agentic/hermes/admin/manage.py kb-extract --force-organize
+```
+
+Optional system OCR for images and scanned PDFs: `brew install tesseract` (macOS).
+
+More detail: [`agentic/hermes/kb/README.md`](agentic/hermes/kb/README.md) ·
+[`agentic/hermes/working_agreements_kb.md`](agentic/hermes/working_agreements_kb.md)
+
+### 4. Run it — after bootstrap
+
+**Hello-world job search** (invokes `zazu_researcher` via Hermes; writes
+`agentic/hermes/.generated/researched/search_latest.md`). Postings are filtered by
+**recency**, not hit count — default **last 10 days** (`--posted-within-days`):
+
+```bash
+# default: last 10 days
+python agentic/hermes/admin/manage.py search -q "Software Engineering Manager"
+
+# wider window
+python agentic/hermes/admin/manage.py search -q "Software Engineering Manager" --posted-within-days 14
+
+# tighter (e.g. only this week)
+python agentic/hermes/admin/manage.py search -q "Software Engineering Manager" --posted-within-days 7
+
+python agentic/hermes/admin/manage.py apply --from-search          # DOCX from top CONSIDER hit
+python agentic/hermes/admin/manage.py apply --all-from-search --coach --force  # every CONSIDER row + coach
+python agentic/hermes/admin/manage.py apply --from-search --coach  # + Application Coach customization
+```
+
+**Other useful commands:**
+
+```bash
+python agentic/hermes/admin/manage.py kb-scan              # catalog only (no RAG rebuild)
+python agentic/hermes/admin/manage.py kb-extract         # full vault → index + RAG
+python agentic/hermes/admin/manage.py hermes dashboard     # interactive chat UI
+python run_tests.py
+```
+
+**Hermes chat** (pick a profile in the dashboard):
+
+```text
+EVALUATE_OPPORTUNITY
+url: https://jobs.lever.co/example/...
+description: |
+  <paste job description>
+```
+
+Outputs land in **`agentic/hermes/.generated/`** — researched drafts, future
+recommendation reports, and (after approval) application DOCX in
+`proposals/<YYYYMMDDHHmmss>/`. See
+[`working_agreements_generated.md`](agentic/hermes/working_agreements_generated.md).
+
+### Next steps
+
+1. ~~Application registry~~ — SQLite at `.kb/_index/applications.db` (`applications import-vault|list|record-outcome`)
+2. Intake adapters as code (`user_direct`, `recruiter_message`)
+3. Hybrid BM25 + vector RAG for dedupe enrichment
+
+→ Setup: [SETUP.md](SETUP.md) · Bootstrap: [`agentic/hermes/README.md`](agentic/hermes/README.md)
+
+---
+
+## Status
+
+**Bootstrap ready** — three Hermes profiles, CKM front desk (RFC), KB ingestion + RAG, search/apply pipeline, learning trace.
+
+Design: [docs/rfc/CKM_front_desk.md](docs/rfc/CKM_front_desk.md)
+
+---
+
+## Legacy archive
+
+| Branch | Contents |
+|---|---|
+| `archive/legacy-job-ai-sistant` | Original WinForms C# app, React prototype, cover-letter prompt generator, SQLite tracking |
+
+---
+
+## License
+
+TBD — prior work used MIT-style terms; new codebase license to be decided.

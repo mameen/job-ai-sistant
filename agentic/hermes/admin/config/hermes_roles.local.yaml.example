@@ -1,0 +1,25 @@
+# Optional local Hermes / Ollama overrides (SAFE TEMPLATE — no machine-specific secrets)
+#
+#   cp hermes_roles.local.yaml.example hermes_roles.local.yaml
+#   # edit hermes_roles.local.yaml ( gitignored )
+#
+# Merged on top of hermes_roles.yaml by manage.py (setup, status, search, …).
+
+# Uncomment and edit only what differs from hermes_roles.yaml on your machine.
+
+# ollama:
+#   base_url: http://localhost:11434/v1
+#   default_model: llama3.1:latest
+#   context_length: 131072
+
+# ollama_remote:
+#   base_url: http://YOUR_GPU_HOST:11434/v1
+#   default_model: qwen3.6:35b
+#   context_length: 262144
+
+# Example: per-profile toolset tweak (rare)
+# zazu_knowledge_manager_toolsets:
+#   - file
+#   - web
+#   - kanban_worker
+#   - hermes-cli

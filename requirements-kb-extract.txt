@@ -1,0 +1,15 @@
+# Career Intelligence — optional KB deep extraction (OCR + unstructured)
+#
+# Install after requirements.txt (or use bootstrap --extract-kb which installs both):
+#   pip install -r requirements-kb-extract.txt
+#
+# System OCR (macOS):
+#   brew install tesseract
+#
+# System OCR (Ubuntu/Debian):
+#   sudo apt install tesseract-ocr
+
+-r requirements.txt
+
+unstructured[pdf,image]>=0.16.0
+pytesseract>=0.3.10

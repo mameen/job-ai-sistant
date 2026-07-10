@@ -1,0 +1,3 @@
+Jane Doe — Software Engineering Manager
+
+Experience leading distributed systems teams. Python, Go, AWS.

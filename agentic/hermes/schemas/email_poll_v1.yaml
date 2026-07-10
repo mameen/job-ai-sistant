@@ -1,0 +1,25 @@
+# email_poll/v1 — recruiter email batch from manage.py email poll
+#
+# Output: agentic/hermes/.generated/intake/email_poll_<stamp>.json
+#         agentic/hermes/.generated/intake/email_poll_latest.json
+# State:  agentic/hermes/.runtime/email_poll_state.json (seen message IDs)
+
+schema: email_poll/v1
+
+fields:
+  vault_key: secrets vault entry key used for this poll
+  connector: gmail | outlook | imap
+  fetched_at: ISO8601 UTC
+  fetched_total: unread messages returned by provider this run
+  skipped_seen: already processed message IDs skipped
+  count: new opportunities written this run
+  opportunities: list of opportunity_artifact/v1 objects
+
+downstream:
+  - CKM routes EVALUATE per opportunity
+  - zazu_researcher produces Recommendation Report from recruiter_message intake
+
+related:
+  - schemas/opportunity_v1.yaml
+  - schemas/secrets_vault_v1.yaml
+  - docs/rfc/secrets_and_email_intake.md

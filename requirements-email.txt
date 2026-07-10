@@ -1,0 +1,13 @@
+# Email intake — Gmail, Outlook Graph, IMAP (Yahoo)
+#
+# Install when using manage.py email poll:
+#   pip install -r requirements-email.txt
+#
+# Base stack (requirements.txt) must already be installed.
+
+-r requirements.txt
+
+google-auth>=2.29.0,<3
+google-api-python-client>=2.120.0,<3
+msal>=1.28.0,<2
+requests>=2.31.0,<3

@@ -1,0 +1,43 @@
+# learning_events/v1 + application_topics — auditable career learning trail
+#
+# Storage: same SQLite file as applications.db (.kb/_index/applications.db)
+# Schema: application_registry_v1.yaml (applications table)
+#
+# Written by: record-outcome, topic tagging, future CKM learning proposals
+# Read by: manage.py career learning|topics, CKM ANALYZE intents
+
+schema: learning_events/v1
+storage: sqlite3
+database: applications.db
+
+table: application_topics
+description: Normalized topic tags per opportunity (e.g. mcp, ai_platform, remote)
+fields:
+  opportunity_id: FK → applications
+  topic: lowercase slug
+  source: user | researcher | auto
+  created_at: ISO8601 UTC
+primary_key: [opportunity_id, topic]
+
+table: learning_events
+description: Explained learning / preference signals with trace refs
+fields:
+  event_id: le:YYYYMMDD:hash prefix (primary key)
+  source_type: user_rejection | user_outcome | user_kb_edit | coach_proposal | search_signal | topic_tag
+  source_ref: opportunity_id, proposal_run, search_run_id, or path
+  target: topic:mcp | career_goals#industry | red_flags | etc.
+  action: proposed | auto_applied | approved | rejected
+  explanation: human-readable why (required)
+  created_at: ISO8601 UTC
+
+indexes:
+  - source_ref
+  - target
+  - action
+  - created_at
+
+trace_chain:
+  opportunity_id: stable per role (applications table)
+  proposal_run: proposals/YYYYMMDDHHmmss/
+  search_run_id: search_latest.md batch (mtime or explicit id)
+  learning_event_id: this table's event_id
